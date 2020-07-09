@@ -7,24 +7,37 @@ import  config
 from datetime import datetime, date, time
 import asyncio
 import threading
+import sys
+
 tb = TeleBot(config.Token)
 ip = '158.58.182.101'
 port = '1080'
 number=1
+
+#добавить gitguardian
 proxy = {
     'http': 'http://lcdydnxn-'+str(number)+':3ekg17pfkoft@p.webshare.io:80',
     'https': 'https://lcdydnxn-'+str(number)+':3ekg17pfkoft@p.webshare.io:80'
 }
-#apihelper.proxy=proxy
+
 exclude_words = ['Сувенирный','Капсула с автографом']
-chat_id = 423881253
+#chat_id = 2254
+chat_id = 123
 sleep_time = 5
 CanWork=0
+stoper = True
 
 
-@tb.message_handler(commands=["status"])
+@tb.message_handler(commands=["start"])
 def message(message):
- tb.send_message(chat_id,"123")
+ tb.send_message(message.chat.id,"Starting...")
+ threading.Thread(target=start(message.chat.id)).start()
+
+@tb.message_handler(commands=["stop"])
+def message(message):
+ tb.send_message(message.chat.id,str(threading.current_thread().is_alive()))
+ tb.send_message(message.chat.id,"Моя остановочка")
+ sys.exit()
 
 
 def get_price(hash_name):
@@ -34,7 +47,7 @@ def get_price(hash_name):
 	except Exception as e:
 		print('error passed', e)
 
-def start():
+def start(chat_id):
 	os.system('cls')
 	while True:
 		tb.send_message(chat_id, "work " +str(datetime.strftime(datetime.now(),"%H:%M:%S")))
@@ -86,11 +99,9 @@ def start():
 					)
 					tb.send_message(chat_id, message_text, reply_markup=markup)
 		sleep(sleep_time)
+
 def startBot():
 	tb.polling(none_stop=True)
+
 if __name__ == "__main__":
-	threading.Thread(target=start).start()
 	threading.Thread(target=startBot).start()
-	#loop.close()
-	#tb.polling(none_stop=True)
-	#start()
