@@ -9,37 +9,55 @@ import asyncio
 import threading
 import sys
 
+class numClass:
+	number=1
+	def numplus():
+		numClass.number+=1
+	def getNum():
+		return numClass.number
+
+class proxy:
+	proxy = {
+		'http': 'http://lcdydnxn-' + str(numClass.number) + ':3ekg17pfkoft@p.webshare.io:80',
+		'https': 'https://lcdydnxn-' + str(numClass.number) + ':3ekg17pfkoft@p.webshare.io:80'
+	}
+	def setproxy():
+		proxy.proxy={
+		'http': 'http://lcdydnxn-' + str(numClass.number) + ':3ekg17pfkoft@p.webshare.io:80',
+		'https': 'https://lcdydnxn-' + str(numClass.number) + ':3ekg17pfkoft@p.webshare.io:80'
+	}
 tb = TeleBot(config.Token)
 ip = '158.58.182.101'
 port = '1080'
 
-number=2
+
 #добавить gitguardian
 #не работает смена прокси :C /// Для смены прокси поменять цифру number от 1 до 10
-proxy = {
-    'http': 'http://lcdydnxn-'+str(number)+':3ekg17pfkoft@p.webshare.io:80',
-    'https': 'https://lcdydnxn-'+str(number)+':3ekg17pfkoft@p.webshare.io:80'
-}
 # proxy = {
-#     'http': 'http://lcdydnxn-'+str(number)+':3ekg17pfkoft@p.webshare.io:80',
-#     'https': 'https://lcdydnxn-'+str(number)+':3ekg17pfkoft@p.webshare.io:80'
+#      'http': 'http://lcdydnxn-'+str(numClass.number)+':3ekg17pfkoft@p.webshare.io:80',
+#      'https': 'https://lcdydnxn-'+str(numClass.number)+':3ekg17pfkoft@p.webshare.io:80'
 # }
 
 exclude_words = ['Сувенирный','Капсула с автографом']
 chat_id = 123
-sleep_time = 5 #больше 5 ибо бан на айпи прилетает, тк возможно 12 запросов в минуту сделать только
+sleep_time = 1 #больше 5 ибо бан на айпи прилетает, тк возможно 12 запросов в минуту сделать только
 stoper = True
 
-def __init__(self, number):
-        self.number = number
-
-def getNum(self):
-	return self.number
 
 @tb.message_handler(commands=["start"])
 def message(message):
  tb.send_message(message.chat.id,"Starting...")
  threading.Thread(target=start(chat_id=message.chat.id)).start()
+
+@tb.message_handler(commands=["actualproxy"])
+def message(message):
+ tb.send_message(message.chat.id,"Actual proxy: "+ str(proxy.proxy.values()))
+
+@tb.message_handler(commands=["nextproxy"])
+def message(message):
+	numClass.numplus()
+	proxy.setproxy()
+	tb.send_message(message.chat.id, "New proxy: "+str(proxy.proxy.values()))
 
 @tb.message_handler(commands=["stop"])
 def message(message):
@@ -50,31 +68,34 @@ def message(message):
 
 def get_price(hash_name):
 	try:
-		response = requests.get('https://steamcommunity.com/market/priceoverview/?appid=730&country=US&currency=1&market_hash_name=' + hash_name,proxies=proxy)
+		response = requests.get(
+			'https://steamcommunity.com/market/priceoverview/?appid=730&country=US&currency=1&market_hash_name=' + hash_name,
+			proxies=proxy)
 		return response.json()['lowest_price']
 	except Exception as e:
 		print('error passed', e)
 
+
 def start(chat_id):
-	CanWork=0
-	number=1
+	CanWork = 9
 	os.system('cls')
 	while True:
-		tb.send_message(chat_id, "work " +str(datetime.strftime(datetime.now(),"%H:%M:%S")))
+		tb.send_message(chat_id, "work " + str(datetime.strftime(datetime.now(), "%H:%M:%S")))
 		try:
-			response = requests.get('https://steamcommunity.com/market/recent?country=RU&language=russian&currency=1',proxies=proxy)
+			response = requests.get(
+				'https://steamcommunity.com/market/recent?country=RU&language=russian&currency=1', proxies=proxy)
 		except Exception as e:
 			print('error passed', e)
 			continue
 		response_json = response.json()
 		if not response_json:
 			sleep(sleep_time)
-			tb.send_message(chat_id,"work but blocked "+str(number)+" "+str(datetime.strftime(datetime.now(),"%H:%M:%S")))
-			tb.send_message(chat_id,proxy.values())
-			CanWork+=1
-			if CanWork==10:
-				self.number+=1
-				number+=1
+			tb.send_message(chat_id, "work but blocked " + str(CanWork) + " " + str(
+				datetime.strftime(datetime.now(), "%H:%M:%S")))
+			CanWork += 1
+			if CanWork == 10:
+				numClass.numplus()
+				proxy.setproxy()
 			continue
 		contexts = response_json.get('assets', {}).get('730', {})
 		for context in contexts:
@@ -107,7 +128,9 @@ def start(chat_id):
 											  stickers_text])
 					markup = types.InlineKeyboardMarkup()
 					markup.add(
-						types.InlineKeyboardButton('Открыть ТП', "https://steamcommunity.com/market/listings/730/" + item['market_hash_name'])
+						types.InlineKeyboardButton('Открыть ТП',
+												   "https://steamcommunity.com/market/listings/730/" + item[
+													   'market_hash_name'])
 					)
 					tb.send_message(chat_id, message_text, reply_markup=markup)
 		sleep(sleep_time)
