@@ -40,7 +40,7 @@ port = '1080'
 
 exclude_words = ['Сувенирный','Капсула с автографом']
 chat_id = 123
-sleep_time = 1 #больше 5 ибо бан на айпи прилетает, тк возможно 12 запросов в минуту сделать только
+sleep_time = 5 #больше 5 ибо бан на айпи прилетает, тк возможно 12 запросов в минуту сделать только
 stoper = True
 
 
@@ -70,20 +70,20 @@ def get_price(hash_name):
 	try:
 		response = requests.get(
 			'https://steamcommunity.com/market/priceoverview/?appid=730&country=US&currency=1&market_hash_name=' + hash_name,
-			proxies=proxy)
+			proxies=proxy.proxy)
 		return response.json()['lowest_price']
 	except Exception as e:
 		print('error passed', e)
 
 
 def start(chat_id):
-	CanWork = 9
+	CanWork = 0
 	os.system('cls')
 	while True:
-		tb.send_message(chat_id, "work " + str(datetime.strftime(datetime.now(), "%H:%M:%S")))
+		#tb.send_message(chat_id, "work " + str(datetime.strftime(datetime.now(), "%H:%M:%S")))
 		try:
 			response = requests.get(
-				'https://steamcommunity.com/market/recent?country=RU&language=russian&currency=1', proxies=proxy)
+				'https://steamcommunity.com/market/recent?country=RU&language=russian&currency=1', proxies=proxy.proxy)
 		except Exception as e:
 			print('error passed', e)
 			continue
