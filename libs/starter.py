@@ -15,7 +15,10 @@ class numClass:
 		numClass.number+=1
 	def getNum():
 		return numClass.number
-
+#
+#ЕСЛИ ПРИ СМЕНЕ ПРОКСИ ТАКЖЕ НЕ РАБОТАЕТ, УБРАТЬ ЕГО ВРУЧНУЮ ИЗ СТРОК 73 И 87
+#	пример запроса без прокси: response = requests.get('https://steamcommunity.com/market/recent?country=RU&language=russian&currency=1')
+#
 class proxy:
 	proxy = {
 		'http': 'http://lcdydnxn-' + str(numClass.number) + ':3ekg17pfkoft@p.webshare.io:80',
@@ -47,6 +50,10 @@ def message(message):
  #threading.Thread(target=start(chat_id=message.chat.id)).start()
  start(chat_id=message.chat.id)
 
+@tb.message_handler(content_types=["text"])
+def message(message):
+ tb.send_message(message.chat.id,"Для старта /start\n для смены прокси /nextproxy")
+
 @tb.message_handler(commands=["actualproxy"])
 def message(message):
  tb.send_message(message.chat.id,"Actual proxy: "+ str(proxy.proxy.values()))
@@ -67,8 +74,8 @@ def message(message):
 def get_price(hash_name):
 	try:
 		response = requests.get(
-			'https://steamcommunity.com/market/priceoverview/?appid=730&country=US&currency=1&market_hash_name=' + hash_name,
-			proxies=proxy.proxy)
+			'https://steamcommunity.com/market/priceoverview/?appid=730&country=US&currency=1&market_hash_name=' + hash_name
+			)
 		return response.json()['lowest_price']
 	except Exception as e:
 		print('error passed', e)
@@ -81,7 +88,7 @@ def start(chat_id):
 		#tb.send_message(chat_id, "work " + str(datetime.strftime(datetime.now(), "%H:%M:%S")))
 		try:
 			response = requests.get(
-				'https://steamcommunity.com/market/recent?country=RU&language=russian&currency=1', proxies=proxy.proxy)
+				'https://steamcommunity.com/market/recent?country=RU&language=russian&currency=1')
 		except Exception as e:
 			print('error passed', e)
 			continue
