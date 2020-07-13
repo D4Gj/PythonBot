@@ -32,11 +32,8 @@ port = '1080'
 
 
 #добавить gitguardian
-#не работает смена прокси :C /// Для смены прокси поменять цифру number от 1 до 10
-# proxy = {
-#      'http': 'http://lcdydnxn-'+str(numClass.number)+':3ekg17pfkoft@p.webshare.io:80',
-#      'https': 'https://lcdydnxn-'+str(numClass.number)+':3ekg17pfkoft@p.webshare.io:80'
-# }
+#Для смены прокси поменять цифру number от 1 до 10
+
 
 exclude_words = ['Сувенирный','Капсула с автографом']
 chat_id = 123
@@ -47,7 +44,8 @@ stoper = True
 @tb.message_handler(commands=["start"])
 def message(message):
  tb.send_message(message.chat.id,"Starting...")
- threading.Thread(target=start(chat_id=message.chat.id)).start()
+ #threading.Thread(target=start(chat_id=message.chat.id)).start()
+ start(chat_id=message.chat.id)
 
 @tb.message_handler(commands=["actualproxy"])
 def message(message):
@@ -91,7 +89,7 @@ def start(chat_id):
 		if not response_json:
 			sleep(sleep_time)
 			tb.send_message(chat_id, "work but blocked " + str(CanWork) + " " + str(
-				datetime.strftime(datetime.now(), "%H:%M:%S")))
+				datetime.strftime(datetime.now(), "%H:%M:%S"))+"\n"+str(proxy.proxy.values()))
 			CanWork += 1
 			if CanWork == 10:
 				numClass.numplus()
