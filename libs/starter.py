@@ -40,7 +40,6 @@ port = '1080'
 exclude_words = ['Сувенирный','Капсула с автографом']
 chat_id = 123
 sleep_time = 5 #больше 5 ибо бан на айпи прилетает, тк возможно 12 запросов в минуту сделать только
-stoper = True
 
 
 @tb.message_handler(commands=["start"])
