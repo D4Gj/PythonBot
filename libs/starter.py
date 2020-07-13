@@ -9,6 +9,7 @@ import asyncio
 import threading
 import sys
 
+#Для смены прокси поменять цифру number от 1 до 10
 class numClass:
 	number=1
 	def numplus():
@@ -35,8 +36,6 @@ port = '1080'
 
 
 #добавить gitguardian
-#Для смены прокси поменять цифру number от 1 до 10
-
 
 exclude_words = ['Сувенирный','Капсула с автографом']
 chat_id = 123
