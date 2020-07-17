@@ -56,6 +56,10 @@ def message(message):
 def message(message):
  tb.send_message(message.chat.id,"Actual proxy: "+ str(proxy.proxy.values()))
 
+@tb.message_handler(commands=["help"])
+def message(message):
+ tb.send_message(message.chat.id,"Для старта /start\n для смены прокси /nextproxy")
+
 @tb.message_handler(commands=["nextproxy"])
 def message(message):
 	numClass.numplus()
